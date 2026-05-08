@@ -42,3 +42,25 @@ def filtrar_por_categoria(datos, nombre_categoria):
             
     # Resultado como nuevo arreglo de Numpy
     return np.array(lista_filtrada)
+
+def limpiar_datos(datos):
+    #Eliminar espacios vacíos " "
+    datos_limpios = []
+    
+    for fila in datos:
+        # Revisar la columna 5 (categoría) y la 8 (ventas)
+        # El b'' es por si Numpy lo leyó como bytes vacíos
+        if fila[5] != b'' and fila[5] != '' and fila[8] != b'' and fila[8] != '':
+            datos_limpios.append(fila)
+            
+    return np.array(datos_limpios)
+
+def exportar_analisis(datos_filtrados, nombre_archivo):
+    """Guarda los datos en la carpeta 'data' con formato CSV."""
+    # Creamos la ruta donde se guardará
+    ruta_salida = f'../data/{nombre_archivo}.csv'
+    
+    # Guardamos usando comas como separador y formato de texto (%s)
+    np.savetxt(ruta_salida, datos_filtrados, delimiter=',', fmt='%s', encoding='utf-8')
+    
+    return ruta_salida
