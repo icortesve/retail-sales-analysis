@@ -1,19 +1,44 @@
 import numpy as np
 
 def cargar_datos(ruta_archivo):
-    # Carga los datos del archivo CSV utilizando NumPy
-    datos = np.genfromtxt(ruta_archivo, delimiter=',', skip_header=1)
+    # Cargar los datos del archivo CSV utilizando NumPy
+    # Se utiliza dtype=None para identificar texto y números automáticamente
+    # encoding='utf-8' para evitar errores de lectura en caracteres especiales
+    datos = np.genfromtxt(ruta_archivo, delimiter=',', skip_header=1, dtype=None, encoding='utf-8')
     return datos
 
-if __name__ == "__main__":
-    ruta_archivo = r'C:\Users\ivanc\Desktop\2. Inversiones\Python_Clases\retail-sales-analysis\DATA\retail_sales_dataset.csv'
-    datos = cargar_datos(ruta_archivo)
-    print(datos)
+def obtener_estadisticas(datos):
+    # Creamos una lista vacía para guardar solo los números
+    lista_ventas = []
+    
+    # Se recorre el dataset fila por fila para extraer la columna 8
+    for fila in datos:
+        valor = float(fila[8]) # Convertir para poder calcular
+        lista_ventas.append(valor)
+    
+    # Convertir la lista a un arreglo de Numpy para usar sus funciones
+    ventas_array = np.array(lista_ventas)
+    
+    # Realizar cálculos
+    total = np.sum(ventas_array)
+    promedio = np.mean(ventas_array)
+    maximo = np.max(ventas_array)
+    minimo = np.min(ventas_array)
+    
+    return total, promedio, maximo, minimo
 
-
-# Pedimos los must
-datos.shape
-datos.info()
-datos.describe()
-datos.head(5)
-datos.tail(5)
+def filtrar_por_categoria(datos, nombre_categoria):
+    lista_filtrada = []
+    
+    # Revisar fila por fila si coincide con la categoría buscada
+    for fila in datos:
+        # Columna 5 es la categoría. Se usa .decode() si viene como bytes
+        categoria_actual = fila[5]
+        if isinstance(categoria_actual, bytes):
+            categoria_actual = categoria_actual.decode('utf-8')
+            
+        if categoria_actual == nombre_categoria:
+            lista_filtrada.append(fila)
+            
+    # Resultado como nuevo arreglo de Numpy
+    return np.array(lista_filtrada)
