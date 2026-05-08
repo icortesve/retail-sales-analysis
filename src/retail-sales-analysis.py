@@ -54,13 +54,3 @@ def limpiar_datos(datos):
             datos_limpios.append(fila)
             
     return np.array(datos_limpios)
-
-def exportar_analisis(datos_filtrados, nombre_archivo):
-    """Guarda los datos en la carpeta 'data' con formato CSV."""
-    # Creamos la ruta donde se guardará
-    ruta_salida = f'../data/{nombre_archivo}.csv'
-    
-    # Guardamos usando comas como separador y formato de texto (%s)
-    np.savetxt(ruta_salida, datos_filtrados, delimiter=',', fmt='%s', encoding='utf-8')
-    
-    return ruta_salida
